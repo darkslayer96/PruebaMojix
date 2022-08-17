@@ -15,8 +15,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   song:SongModel;
   typeBool: boolean;
   listSongs: SongResponse;
-  page_number = 1;
-  page_limit = 10;
+  textoBuscar: string;
   constructor(
     private apiService: ApiService,
     private loadingController: LoadingController,
@@ -33,23 +32,54 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   async getSongs(name, type){
     const loading = await this.loadingController.create({
-      message: 'Loading Songs'
+      message: 'Cargando'
     })
     await loading.present();
-    this.apiService.searchSongs(name,type)
+    console.log(name)
+    if(name == "" || undefined){
+      this.getSongs(environment.initialSearch.name,environment.initialSearch.type)
+    }else{
+      this.apiService.searchSongs(name,type)
       .subscribe(
         res =>{
+
           loading.dismiss();
-          console.log(res);
-          this.listSongs = res
-          console.log(this.listSongs)
+          if(res.resultCount !=0){
+            this.listSongs = res
+          }else{
+            this.presentAlertNoContent()
+            this.listSongs = res
+          }
+        
         },
         error =>{
           loading.dismiss();
-          console.error(error)
+          this.presentAlertError();
+          
+          
         }
       )
+    }
     
+    
+  }
+
+  async presentAlertError() {
+    const alert = await this.alertController.create({
+      header: environment.mensajeError.Titulo,
+      message: environment.mensajeError.Mensaje,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+  async presentAlertNoContent() {
+    const alert = await this.alertController.create({
+      header: environment.mensajeError.Titulo,
+      message: "No hemos logrado encontrar tu búsqueda",
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
   searchSong(value, type){

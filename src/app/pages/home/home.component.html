@@ -4,18 +4,18 @@
 
     <ion-buttons slot="end">
       <ion-label>Music/Movie</ion-label>
-      <ion-toggle [(ngModel)]="typeBool"></ion-toggle>
+      <ion-toggle [(ngModel)]="typeBool" (ionChange)="searchSong(textoBuscar, typeBool)"></ion-toggle>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-searchbar (ionChange)="searchSong($event.target.value, typeBool)" debounce="500"></ion-searchbar>
+  <ion-searchbar [(ngModel)]="textoBuscar" (ionChange)="searchSong($event.target.value, typeBool)" debounce="500"></ion-searchbar>
 <ion-grid fixed>
   <ion-row *ngFor="let song of listSongs?.results;  let even = even; let odd = odd">
-    <ion-col size="12" >
+    <ion-col size="12">
       <app-song [currentSong]="song" [even]="even"></app-song>  
     </ion-col>
-   
+ 
   
   </ion-row>
 </ion-grid>

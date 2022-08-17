@@ -11,6 +11,10 @@ export const environment = {
   initialSearch : {
     name: "Shakira",
     type: "music"
+  },
+  mensajeError:{
+    Titulo: "OOOPS!",
+    Mensaje: "Ha ocurrido un error. Intenta nuevamente"
   }
 };
 
